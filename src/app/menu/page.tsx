@@ -1,26 +1,19 @@
 "use client";
 
-import Image from "next/image";
-import pg from 'pg';
 import { useEffect, useState } from "react";
-import { get } from '@/app/product/actions'
+import { getProducts } from '@/app/menu/actions'
 
-interface Product {
-  product_id: number;
-  description: string;
-  price: number;
-}
-
-export default function Product() {
+export default function Menu() {
 
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     (async ()=>{
-      const result = await get();
+      const result = await getProducts();
       setProducts(result);
     })();
   },[])
+  
   return (
     <div>
       {products.map(product => (
