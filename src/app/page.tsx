@@ -1,6 +1,5 @@
 import Link from "next/link"
 import {invoke} from "./blitz-server"
-import {LogoutButton} from "./(auth)/components/LogoutButton"
 import styles from "./styles/Home.module.css"
 import getCurrentUser from "./users/queries/getCurrentUser"
 
@@ -34,7 +33,6 @@ export default async function Home() {
               <div className={styles.buttonContainer}>
                 {currentUser ? (
                   <>
-                    <LogoutButton />
                     <div>
                       User id: <code>{currentUser.id}</code>
                       <br />
@@ -43,12 +41,6 @@ export default async function Home() {
                   </>
                 ) : (
                   <>
-                    <Link href="/signup" className={styles.button}>
-                      <strong>Sign Up</strong>
-                    </Link>
-                    <Link href="/login" className={styles.loginButton}>
-                      <strong>Login</strong>
-                    </Link>
                   </>
                 )}
               </div>
