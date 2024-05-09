@@ -21,3 +21,7 @@ export const addItem = (cartItems: CartItem[], product: Product): CartItem[] => 
   }
   return cartItems;
 }
+
+export const removeItem = (cartItems: CartItem[], product_id: number): CartItem[] => {
+  return cartItems.filter(item => item.product.product_id !== product_id);
+}

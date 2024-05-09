@@ -4,7 +4,7 @@ import { useStore } from '../page';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { calcTotalPrice } from '@/utils/cart';
+import { calcQuantity, calcTotalPrice } from '@/utils/cart';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Cart() {
-  const { items } = useStore();
+  const { items, removeItem } = useStore();
   
   return (
     <Grid container spacing={2}>
@@ -36,6 +36,7 @@ export default function Cart() {
             <th>preço</th>
             <th>quantidade</th>
             <th>total</th>
+            <th></th>
           </tr>
           {
             items.map(cartItem => (
@@ -44,12 +45,14 @@ export default function Cart() {
                 <td>{cartItem.product.price}</td>
                 <td>{cartItem.quantity}</td>
                 <td>{cartItem.quantity * cartItem.product.price}</td>
+                <td onClick={() => removeItem(cartItem.product.product_id)}>X</td>
               </tr>
             ))
           }
         </table>
         <Grid item xs={6} md={4}>
           <Item>
+            {calcQuantity(items)} items
             Total: {calcTotalPrice(items)}€
           </Item>
       </Grid>
