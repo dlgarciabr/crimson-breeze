@@ -1,4 +1,16 @@
+import { addItem } from "@/utils/cart";
 import Image from "next/image";
+import { create } from 'zustand'
+
+interface CartState {
+  items: CartItem[]
+  addItem: (item: Product) => void
+}
+
+export const useStore = create<CartState>((set) => ({
+  items: [],
+  addItem: (product) => set((state) => ({ items: addItem(state.items, product)})),
+}))
 
 export default function Home() {
   return (
