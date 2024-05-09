@@ -7,13 +7,10 @@ import Paper from '@mui/material/Paper';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Link from 'next/link';
-import { useStore } from "../page";
 import Badge from '@mui/material/Badge';
-import { calcQuantity } from "@/utils/cart";
+import { calcQuantity, useStore } from "@/utils/cart";
 
 export default function Products() {
 

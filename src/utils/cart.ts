@@ -1,3 +1,11 @@
+import { create } from 'zustand';
+
+export const useStore = create<CartState>((set) => ({
+  items: [],
+  addItem: (product) => set((state) => ({ items: addItem(state.items, product)})),
+  removeItem: (productId) => set((state) => ({ items: removeItem(state.items, productId)})),
+}))
+
 export const calcTotalPrice = (items: CartItem[]) => {
   return items.reduce(
     (accumulator, cartItem) => accumulator + cartItem.product.price * cartItem.quantity,

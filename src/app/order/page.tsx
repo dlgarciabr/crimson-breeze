@@ -1,10 +1,9 @@
 "use client";
 import Link from 'next/link';
-import { useStore } from '../page';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { calcQuantity, calcTotalPrice } from '@/utils/cart';
+import { calcQuantity, calcTotalPrice, useStore } from '@/utils/cart';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -19,14 +18,9 @@ export default function Cart() {
   
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6} md={8}>
+      <Grid item xs={12} md={12}>
         <Item>
           VOSSO PEDIDO
-        </Item>
-      </Grid>
-      <Grid item xs={6} md={4}>
-        <Item>
-          <Link href="/products">products</Link>
         </Item>
       </Grid>
       <Grid item xs={6} md={4}>
@@ -50,12 +44,22 @@ export default function Cart() {
             ))
           }
         </table>
-        <Grid item xs={6} md={4}>
-          <Item>
-            {calcQuantity(items)} items
-            Total: {calcTotalPrice(items)}€
-          </Item>
       </Grid>
+      <Grid item xs={12} md={12}>
+        <Item>
+          {calcQuantity(items)} items
+          Total: {calcTotalPrice(items)}€
+        </Item>
+      </Grid>
+      <Grid item xs={6} md={4}>
+        <Item>
+          <Link href="/products">VOLTAR AO MENU</Link>
+        </Item>
+      </Grid>
+      <Grid item xs={6} md={4}>
+        <Item>
+          <Link href="/products">FINALIZAR PEDIDO</Link>
+        </Item>
       </Grid>
     </Grid>
   )

@@ -1,14 +1,6 @@
-import { addItem, removeItem } from "@/utils/cart";
-import { create } from 'zustand'
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-
-export const useStore = create<CartState>((set) => ({
-  items: [],
-  addItem: (product) => set((state) => ({ items: addItem(state.items, product)})),
-  removeItem: (productId) => set((state) => ({ items: removeItem(state.items, productId)})),
-}))
 
 export default function Home() {
   return (
