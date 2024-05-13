@@ -21,7 +21,7 @@ export const calcQuantity = (items: CartItem[]) => {
 }
 
 export const addItem = (cartItems: CartItem[], product: Product): CartItem[] => {
-  const addedCartItem = cartItems.find(item => item.product.product_id === product.product_id);
+  const addedCartItem = cartItems.find(item => item.product.productId === product.productId);
   if(addedCartItem){
     addedCartItem.quantity++;
   }else{
@@ -30,6 +30,6 @@ export const addItem = (cartItems: CartItem[], product: Product): CartItem[] => 
   return cartItems;
 }
 
-export const removeItem = (cartItems: CartItem[], product_id: number): CartItem[] => {
-  return cartItems.filter(item => item.product.product_id !== product_id);
+export const removeItem = (cartItems: CartItem[], productId: number): CartItem[] => {
+  return cartItems.filter(item => item.product.productId !== productId);
 }

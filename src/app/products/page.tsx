@@ -11,6 +11,17 @@ import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Link from 'next/link';
 import Badge from '@mui/material/Badge';
 import { calcQuantity, useStore } from "@/utils/cart";
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 export default function Products() {
 
@@ -26,7 +37,7 @@ export default function Products() {
 
   const renderProductCard = (product: Product) => {
     return (
-      <Paper elevation={3} key={product.product_id} onClick={() => addItem(product)}>
+      <Paper elevation={3} key={product.productId} onClick={() => addItem(product)}>
         {product.description}{product.price}
       </Paper>
     );
@@ -59,8 +70,19 @@ export default function Products() {
           },
         }}
       >
-        {products.map(renderProductCard)}
+        {products.filter(product => product.available && product.visible).map(renderProductCard)}
       </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12}>
+          <Item>
+            <Link href="/order">
+              <Button variant="contained" size="large" fullWidth>
+                Ver meu pedido
+              </Button>
+            </Link>
+          </Item>
+        </Grid>
+      </Grid>
     </Box>
   )
 }

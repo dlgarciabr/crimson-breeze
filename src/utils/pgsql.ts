@@ -14,7 +14,6 @@ const connect = async () => {
     }
   })
   await client.connect();
-  console.log('connected')
 }
 
 export const getClient = async () => {

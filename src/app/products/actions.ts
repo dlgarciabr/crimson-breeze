@@ -2,26 +2,19 @@
 
 import { getClient } from "@/utils/pgsql";
 
-// import pg from 'pg';
+export const getProducts = async (available = true): Promise<Product[]> => {
+  const client = await getClient();
+  const query = {
+    text: 'SELECT * FROM PRODUCTS WHERE SOLD_OUT = $1',
+    values: [available ? 'f': 't'],
+  }
+  const res = await client.query(query);
 
-// const connect = async () => {
-//   const { Client } = pg
-//   const client = new Client({
-//     user: 'arraial_owner',
-//     host: 'ep-damp-shape-a26djqu0.eu-central-1.aws.neon.tech',
-//     database: 'arraial',
-//     password: 'nea1GMgH9Cdt',
-//     ssl: {
-//       rejectUnauthorized: false,
-//     }
-//   })
-//   await client.connect();
-//   console.log('connected')
-//   return client;
-// }
-
-export async function getProducts() {
-    const client = await getClient();
-    const res = await client.query('SELECT * FROM PRODUCTS')
-    return res.rows as Product[];
+  return res.rows.map(row => ({
+    productId: row.product_id,
+    description: row.description,
+    price: row.price,
+    available: !row.sold_out,
+    visible: row.visible
+  }));
 }

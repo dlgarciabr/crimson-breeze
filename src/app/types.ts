@@ -5,9 +5,11 @@ interface CartState {
 }
 
 interface Product {
-  product_id: number;
+  productId: number;
   description: string;
   price: number;
+  available: boolean;
+  visible: boolean;
 }
 
 interface CartItem {
