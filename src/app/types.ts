@@ -1,5 +1,5 @@
-interface CartState {
-  items: CartItem[]
+interface OrderState {
+  order: Order;
   addItem: (item: Product) => void
   removeItem: (productId: number) => void
 }
@@ -12,8 +12,13 @@ interface Product {
   visible: boolean;
 }
 
-interface CartItem {
+interface OrderItem {
   tempId: number;
   product: Product;
   quantity: number;
+}
+
+interface Order {
+  customerName: string;
+  items: OrderItem[];
 }

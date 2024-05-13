@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { calcQuantity, calcTotalPrice, useStore } from '@/utils/cart';
+import { calcQuantity, calcTotalPrice, useStore } from '@/utils/order';
 import Button from '@mui/material/Button';
 import { processOrder } from './actions';
 
@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Cart() {
-  const { items, removeItem } = useStore();
+  const { order: {items}, removeItem } = useStore();
 
   const registerOrder = async () => {
     const ret = await processOrder(items);

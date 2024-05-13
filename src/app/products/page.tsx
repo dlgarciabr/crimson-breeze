@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Link from 'next/link';
 import Badge from '@mui/material/Badge';
-import { calcQuantity, useStore } from "@/utils/cart";
+import { calcQuantity, useStore } from "@/utils/order";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -26,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Products() {
 
   const [products, setProducts] = useState<Product[]>([]);
-  const { addItem, items } = useStore();
+  const { addItem, order: {items} } = useStore();
 
   useEffect(() => {
     (async ()=>{
