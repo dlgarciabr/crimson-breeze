@@ -6,6 +6,16 @@ import Paper from '@mui/material/Paper';
 import { calcQuantity, calcTotalPrice, useStore } from '@/utils/order';
 import Button from '@mui/material/Button';
 import { processOrder } from './actions';
+import { forwardRef, useState } from 'react';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import { TransitionProps } from '@mui/material/transitions';
+import Slide from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -15,20 +25,69 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function Cart() {
-  const { order: {items}, removeItem } = useStore();
+  const { order, removeItem, clearOrder } = useStore();
+  const [ showSuccessModal, setShowSuccessModal ] = useState<boolean>(false);
+  const [ orderNumber, setOrderNumber ] = useState<number | undefined>();
+  const router = useRouter();
+
 
   const registerOrder = async () => {
-    const ret = await processOrder(items);
-    if(ret === -1){
+    //TODO add a confirmation
+    const orderNumber = await processOrder(order);
+    if(orderNumber === -1){
       alert('ORDER INVALID'); //TODO improve
     }else {
-      alert('ORDER NUMBER ' + ret); //TODO improve
+      // alert('ORDER NUMBER ' + ret); //TODO improve
+      setOrderNumber(orderNumber);
+      setShowSuccessModal(true);
+      clearOrder();
     }
     //save order if everything is OK
     //show message if anything is NOK
   }
   
+  const renderSuccessDialog = () => {
+    return (
+      <Dialog 
+        open={showSuccessModal}
+        disableEscapeKeyDown={true}
+        TransitionComponent={Transition}>
+        <DialogTitle>Vosso pedido foi registrado com sucesso!</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <Typography variant="h6" component="div">
+              pedido nº
+            </Typography>
+            <Typography variant="h1" component="div">
+              {orderNumber}
+            </Typography>
+            <Typography variant="h6" component="div" style={{color: "red"}}>
+              Por favor grave este número para ser usado posteriormente!
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseSuccessDialog}>FECHAR</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  const handleCloseSuccessDialog = () => {
+    setShowSuccessModal(false);
+    router.push('/');
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={12}>
@@ -47,7 +106,7 @@ export default function Cart() {
               <th></th>
             </tr>
             {
-              items.map(cartItem => (
+              order.items.map(cartItem => (
                 <tr key={cartItem.tempId}>
                   <td>{cartItem.product.description}</td>
                   <td>{cartItem.product.price}</td>
@@ -62,8 +121,8 @@ export default function Cart() {
       </Grid>
       <Grid item xs={12} md={12}>
         <Item>
-          {calcQuantity(items)} items
-          Total: {calcTotalPrice(items)}€
+          {calcQuantity(order.items)} items
+          Total: {calcTotalPrice(order.items)}€
         </Item>
       </Grid>
       <Grid item xs={6} md={6}>
@@ -78,6 +137,7 @@ export default function Cart() {
           FINALIZAR PEDIDO
         </Button>
       </Grid>
+      {renderSuccessDialog()}
     </Grid>
   )
 }

@@ -17,6 +17,12 @@ export const useStore = create<OrderState>((set) => ({
       items: removeItem(state.order.items, productId)
     }
   })),
+  clearOrder: () => set(() => ({
+    order: {
+      customerName: '',
+      items: []
+    }
+  })),
 }))
 
 export const calcTotalPrice = (items: OrderItem[]) => {
@@ -33,7 +39,7 @@ export const calcQuantity = (items: OrderItem[]) => {
   );
 }
 
-export const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
+const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
   const addedCartItem = cartItems.find(item => item.product.productId === product.productId);
   if(addedCartItem){
     addedCartItem.quantity++;
@@ -43,6 +49,6 @@ export const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] =
   return cartItems;
 }
 
-export const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
+const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
   return cartItems.filter(item => item.product.productId !== productId);
 }

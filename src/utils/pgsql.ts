@@ -1,10 +1,10 @@
 import pg from 'pg';
 
-let client: pg.Client | undefined = undefined;
+let client: pg.PoolClient | undefined = undefined;
 
 const connect = async () => {
-  const { Client } = pg;
-  client = new Client({
+  const { Pool } = pg;
+  const pool = new Pool({
     user: 'arraial_owner',
     host: 'ep-damp-shape-a26djqu0.eu-central-1.aws.neon.tech',
     database: 'arraial',
@@ -12,8 +12,25 @@ const connect = async () => {
     ssl: {
       rejectUnauthorized: false,
     }
+  });
+
+  pool.on('error', (err, client) => {
+    console.error('Unexpected error on idle client', err)
+    process.exit(-1)
   })
-  await client.connect();
+  
+  client = await pool.connect();
+
+  // client = new Client({
+  //   user: 'arraial_owner',
+  //   host: 'ep-damp-shape-a26djqu0.eu-central-1.aws.neon.tech',
+  //   database: 'arraial',
+  //   password: 'nea1GMgH9Cdt',
+  //   ssl: {
+  //     rejectUnauthorized: false,
+  //   }
+  // })
+  // await client.connect();
 }
 
 export const getClient = async () => {
