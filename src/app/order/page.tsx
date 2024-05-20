@@ -189,7 +189,9 @@ export default function Cart() {
                 </Link>
               </Grid>
               <Grid item xs={6} md={6}  style={{paddingTop: '8px', paddingRight: '8px'}}>
-                <Button variant="contained" size="large" onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}>
+                <Button variant="contained" size="large" 
+                  onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}
+                  disabled={order.items.length === 0}>
                   FINALIZAR PEDIDO
                 </Button>
               </Grid>

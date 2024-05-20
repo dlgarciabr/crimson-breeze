@@ -27,7 +27,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Products() {
 
   const [products, setProducts] = useState<Product[]>([]);
-  const { addItem, order: {items} } = useStore();
+  const { addItem, order } = useStore();
 
   useEffect(() => {
     (async ()=>{
@@ -65,7 +65,7 @@ export default function Products() {
             </Typography>
               <div>
                 <Link href="/order">
-                  <Badge badgeContent={calcQuantity(items)} color="secondary">
+                  <Badge badgeContent={calcQuantity(order.items)} color="secondary">
                     <ShoppingCart/>
                   </Badge>
                 </Link>
@@ -93,7 +93,7 @@ export default function Products() {
           <Grid item xs={12} md={12}>
             <Item>
               <Link href="/order">
-                <Button variant="contained" size="large" fullWidth>
+                <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0}>
                   Ver meu pedido
                 </Button>
               </Link>
