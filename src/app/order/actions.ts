@@ -29,7 +29,7 @@ const saveOrder = async (order: Order): Promise<number> => {
   try {
     await client.query('BEGIN');
     const orderInsert = 'INSERT INTO orders(name, paid) VALUES($1, \'f\') RETURNING *'
-    const values = ['teste']; //TODO add customer name
+    const values = [order.customerName];
      
     const orderQueryResponse = await client.query(orderInsert, values)
 

@@ -15,7 +15,8 @@ import DialogActions from '@mui/material/DialogActions';
 import { TransitionProps } from '@mui/material/transitions';
 import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import TextField from '@mui/material/TextField';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -37,12 +38,21 @@ const Transition = forwardRef(function Transition(
 export default function Cart() {
   const { order, removeItem, clearOrder } = useStore();
   const [ showSuccessModal, setShowSuccessModal ] = useState<boolean>(false);
+  const [ showConfirmModal, setShowConfirmModal ] = useState<boolean>(false);
   const [ orderNumber, setOrderNumber ] = useState<number | undefined>();
   const router = useRouter();
+  const [customerName, setCustomerName] = useState<string>('');
 
+  const handleChangeCustomerName = (e: { target: { value: any; }; }) => {
+    setCustomerName(e.target.value);
+  }
 
   const registerOrder = async () => {
-    //TODO add a confirmation
+    if(!customerName){
+      return;
+    }
+    setShowConfirmModal(false);
+    order.customerName = customerName;
     const orderNumber = await processOrder(order);
     if(orderNumber === -1){
       alert('ORDER INVALID'); //TODO improve
@@ -82,6 +92,46 @@ export default function Cart() {
       </Dialog>
     );
   };
+
+  const renderConfirmationModal = () => {
+    return (
+      <Dialog 
+        open={showConfirmModal}
+        maxWidth="xs"
+        disableEscapeKeyDown={true}
+        TransitionComponent={Transition}>
+        <DialogTitle>Confirmação</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <Typography variant="h6" component="div">
+              Insira o vosso nome e confirme o pedido?
+            </Typography>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="email"
+              label="Nome"
+              type="text"
+              fullWidth
+              variant="outlined"
+              onChange={handleChangeCustomerName}
+              value={customerName}
+            />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setShowConfirmModal(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={registerOrder}>
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 
   const handleCloseSuccessDialog = () => {
     setShowSuccessModal(false);
@@ -133,11 +183,12 @@ export default function Cart() {
         </Link>
       </Grid>
       <Grid item xs={6} md={6}>
-        <Button variant="contained" size="large" fullWidth onClick={registerOrder}>
+        <Button variant="contained" size="large" fullWidth onClick={() => setShowConfirmModal(true)}>
           FINALIZAR PEDIDO
         </Button>
       </Grid>
       {renderSuccessDialog()}
+      {renderConfirmationModal()}
     </Grid>
   )
 }

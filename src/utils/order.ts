@@ -51,4 +51,4 @@ const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
 
 const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
   return cartItems.filter(item => item.product.productId !== productId);
-}
+};
