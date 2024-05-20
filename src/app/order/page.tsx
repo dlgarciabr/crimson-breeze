@@ -139,56 +139,64 @@ export default function Cart() {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={12}>
-        <Item>
-          DETALHES DO PEDIDO
-        </Item>
+    <>    
+      <Grid container spacing={2} style={{ paddingBottom: '1000px'}}>
+        <Grid item xs={12} md={12}>
+          <Item>
+            DETALHES DO PEDIDO
+          </Item>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <table style={{width: '100%'}}>
+            <tbody>
+              <tr style={{height: '40px'}}>
+                <th>ITEM</th>
+                <th>PREÇO</th>
+                <th>QTD</th>
+                <th>TOTAL</th>
+                <th></th>
+              </tr>
+              {
+                order.items.map(cartItem => (
+                  <tr key={cartItem.tempId} style={{borderStyle: 'solid', borderWidth: '1px', borderColor: '#ac9f9f', height: '40px'}}>
+                    <td>{cartItem.product.description}</td>
+                    <td align='center'>{cartItem.product.price.toString().replace('.', ',')}</td>
+                    <td align='center'>{cartItem.quantity}</td>
+                    <td align='center'>{(cartItem.quantity * cartItem.product.price).toString().replace('.', ',')}</td>
+                    <td onClick={() => removeItem(cartItem.product.productId)}>X</td>
+                  </tr>
+                ))
+              }
+              <tr>
+                <th colSpan={3} style={{color: 'red'}}>{calcQuantity(order.items)} items</th>
+                <th colSpan={1} style={{color: 'red'}}>Total: {calcTotalPrice(order.items)}€</th>
+              </tr>
+            </tbody>
+          </table>
+        </Grid>
+        {renderSuccessDialog()}
+        {renderConfirmationModal()}
       </Grid>
-      <Grid item xs={6} md={4}>
-        <table>
-          <tbody>
-            <tr>
-              <th>item</th>
-              <th>preço</th>
-              <th>quantidade</th>
-              <th>total</th>
-              <th></th>
-            </tr>
-            {
-              order.items.map(cartItem => (
-                <tr key={cartItem.tempId}>
-                  <td>{cartItem.product.description}</td>
-                  <td>{cartItem.product.price}</td>
-                  <td>{cartItem.quantity}</td>
-                  <td>{cartItem.quantity * cartItem.product.price}</td>
-                  <td onClick={() => removeItem(cartItem.product.productId)}>X</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </Grid>
-      <Grid item xs={12} md={12}>
-        <Item>
-          {calcQuantity(order.items)} items
-          Total: {calcTotalPrice(order.items)}€
-        </Item>
-      </Grid>
-      <Grid item xs={6} md={6}>
-        <Link href="/products">
-          <Button variant="outlined" size="large" fullWidth>
-            VOLTAR AO MENU
-          </Button>
-        </Link>
-      </Grid>
-      <Grid item xs={6} md={6}>
-        <Button variant="contained" size="large" fullWidth onClick={() => setShowConfirmModal(true)}>
-          FINALIZAR PEDIDO
-        </Button>
-      </Grid>
-      {renderSuccessDialog()}
-      {renderConfirmationModal()}
-    </Grid>
+      <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
+        <Grid container spacing={2} style={{backgroundColor: 'white', marginBottom: '7px'}}>
+          {/* <Grid item xs={12} md={12}> */}
+            {/* <Item> */}
+              <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
+                <Link href="/products">
+                  <Button variant="outlined" size="large" fullWidth>
+                    VOLTAR AO MENU
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item xs={6} md={6}  style={{paddingTop: '8px', paddingRight: '8px'}}>
+                <Button variant="contained" size="large" onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}>
+                  FINALIZAR PEDIDO
+                </Button>
+              </Grid>
+            {/* </Item> */}
+          {/* </Grid> */}
+        </Grid>
+      </footer>
+    </>
   )
 }
