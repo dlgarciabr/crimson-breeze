@@ -79,7 +79,7 @@ export default function Products() {
           </Toolbar>
         </AppBar>
       </header>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginTop: '60px', }} align="center">
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginTop: '60px' }} color='#090f96' align="center">
         comidas
       </Typography>
       <Box
@@ -95,7 +95,7 @@ export default function Products() {
       >
         {products.filter(product => product.visible && product.type === 1).map(renderProductCard)}
       </Box>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align="center">
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align="center" color='#090f96'>
         bebidas
       </Typography>
       <Box

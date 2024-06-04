@@ -18,6 +18,10 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import TextField from '@mui/material/TextField';
 import { formatValue } from '@/utils/format';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -136,12 +140,21 @@ export default function Cart() {
   };
 
   return (
-    <>    
-      <Grid container spacing={2} style={{ paddingBottom: '1000px'}}>
+    <>
+      <header style={{ position: "fixed", top: 0, width: '100%'}}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Agrupamento 549 Ovar
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </header>
+      <Grid container spacing={2} style={{ paddingBottom: '1000px', marginTop: '60px'}}>
         <Grid item xs={12} md={12}>
-          <Item>
-            DETALHES DO PEDIDO
-          </Item>
+          <Typography variant="h6" component="div" align='center' color='#090f96'>
+            RESUMO DA VOSSA ESCOLHA
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12}>
           <table style={{width: '100%'}}>
@@ -160,13 +173,18 @@ export default function Cart() {
                     <td align='center'>{formatValue(cartItem.product.price, false)}</td>
                     <td align='center'>{cartItem.quantity}</td>
                     <td align='center'>{(formatValue(cartItem.quantity * cartItem.product.price, false))}</td>
-                    <td onClick={() => removeItem(cartItem.product.productId)}>X</td>
+                    <td onClick={() => removeItem(cartItem.product.productId)}>
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
+                    </td>
                   </tr>
                 ))
               }
               <tr>
-                <th colSpan={3} style={{color: 'red', fontSize: 18}}>{calcQuantity(order.items)} items</th>
-                <th colSpan={1} style={{color: 'red', fontSize: 18}}>Total: {formatValue(calcTotalPrice(order.items), true)}</th>
+                <th colSpan={2} style={{color: 'red', fontSize: 18}}>{calcQuantity(order.items)} item(s)</th>
+                <th colSpan={1} style={{color: 'red', fontSize: 18}}>Total:</th>
+                <th colSpan={1} style={{color: 'red', fontSize: 18}}>{formatValue(calcTotalPrice(order.items), true)}</th>
               </tr>
             </tbody>
           </table>
