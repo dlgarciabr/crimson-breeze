@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { ToastType, showToast } from "@/components/Toast";
+import { formatValue } from "@/utils/format";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -43,14 +44,19 @@ export default function Products() {
 
   const renderProductCard = (product: Product) => {
     return (
-      <Paper elevation={3} key={product.productId} onClick={() => addToOrder(product)}
+      <Paper elevation={3} key={product.productId} onClick={product.available ? () => addToOrder(product) : ()=>{}}
         style={{paddingTop: '20px', textAlign: 'center'}}>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" style={product.available ? {} : {color: 'grey'}}>
           {product.description}
         </Typography>
-        <Typography variant="h5" color="text.secondary">
-          {product.price.toString().replace('.',',')} €
+        <Typography variant="h5" color="text.secondary" style={product.available ? {} : {color: 'grey'}}>
+          {formatValue(product.price, true)}
         </Typography>
+        {!product.available && 
+          <Typography variant="h6" color="red">
+            indisponível
+          </Typography>
+        }
       </Paper>
     );
   }
@@ -73,9 +79,27 @@ export default function Products() {
           </Toolbar>
         </AppBar>
       </header>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginTop: '60px', }} align="center">
+        comidas
+      </Typography>
       <Box
         sx={{
-          marginTop: '60px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          '& > :not(style)': {
+            m: 1,
+            width: '45%',
+            height: 128,
+          },
+        }}
+      >
+        {products.filter(product => product.visible && product.type === 1).map(renderProductCard)}
+      </Box>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align="center">
+        bebidas
+      </Typography>
+      <Box
+        sx={{
           marginBottom: '60px',
           display: 'flex',
           flexWrap: 'wrap',
@@ -86,7 +110,7 @@ export default function Products() {
           },
         }}
       >
-        {products.filter(product => product.available && product.visible).map(renderProductCard)}
+        {products.filter(product => product.visible && product.type === 2).map(renderProductCard)}
       </Box>
       <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
         <Grid container spacing={2}>

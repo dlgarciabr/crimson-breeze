@@ -11,6 +11,7 @@ interface Product {
   price: number;
   available: boolean;
   visible: boolean;
+  type: number;
 }
 
 interface OrderItem {

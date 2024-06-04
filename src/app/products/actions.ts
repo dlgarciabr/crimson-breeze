@@ -2,11 +2,11 @@
 
 import { getClient } from "@/utils/pgsql";
 
-export const getProducts = async (available = true): Promise<Product[]> => {
+export const getProducts = async (available?: boolean): Promise<Product[]> => {
   const client = await getClient();
   const query = {
-    text: 'SELECT * FROM PRODUCTS WHERE SOLD_OUT = $1',
-    values: [available ? 'f': 't'],
+    text: `SELECT * FROM PRODUCTS ${available !== undefined ? 'WHERE SOLD_OUT = $1': ''}`,
+    values: available !== undefined ? [available ? 'f': 't'] : [],
   }
   const res = await client.query(query);
 
@@ -15,6 +15,7 @@ export const getProducts = async (available = true): Promise<Product[]> => {
     description: row.description,
     price: row.price,
     available: !row.sold_out,
-    visible: row.visible
+    visible: row.visible,
+    type: row.product_type
   }));
 }

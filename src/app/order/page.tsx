@@ -17,6 +17,7 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import TextField from '@mui/material/TextField';
+import { formatValue } from '@/utils/format';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -48,22 +49,15 @@ export default function Cart() {
   }
 
   const registerOrder = async () => {
-    if(!customerName){
-      return;
-    }
     setShowConfirmModal(false);
     order.customerName = customerName;
     const orderNumber = await processOrder(order);
     if(orderNumber === -1){
       alert('ORDER INVALID'); //TODO improve
     }else {
-      // alert('ORDER NUMBER ' + ret); //TODO improve
       setOrderNumber(orderNumber);
       setShowSuccessModal(true);
-      clearOrder();
     }
-    //save order if everything is OK
-    //show message if anything is NOK
   }
   
   const renderSuccessDialog = () => {
@@ -72,17 +66,20 @@ export default function Cart() {
         open={showSuccessModal}
         disableEscapeKeyDown={true}
         TransitionComponent={Transition}>
-        <DialogTitle>Vosso pedido foi registrado com sucesso!</DialogTitle>
+        <DialogTitle>Vossa escolha foi registada com sucesso!</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Typography variant="h6" component="div">
+            <Typography variant="h6" component="div" align='center'>
               pedido nº
             </Typography>
-            <Typography variant="h1" component="div">
+            <Typography variant="h1" component="div" align='center'>
               {orderNumber}
             </Typography>
-            <Typography variant="h6" component="div" style={{color: "red"}}>
-              Por favor grave este número para ser usado posteriormente!
+            <Typography variant="h6" component="div" style={{color: "red"}} align='center'>
+              Por favor, apresente este número na caixa para efetuar o pagamento!
+            </Typography>
+            <Typography variant="h4" component="div" style={{color: "blue"}} align='center'>
+              Valor a pagar {formatValue(calcTotalPrice(order.items), true)}
             </Typography>
           </DialogContentText>
         </DialogContent>
@@ -104,11 +101,10 @@ export default function Cart() {
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <Typography variant="h6" component="div">
-              Insira o vosso nome e confirme o pedido?
+              Se desejares insira o vosso nome e confirme a escolha.
             </Typography>
             <TextField
               autoFocus
-              required
               margin="dense"
               id="name"
               name="email"
@@ -135,6 +131,7 @@ export default function Cart() {
 
   const handleCloseSuccessDialog = () => {
     setShowSuccessModal(false);
+    clearOrder();
     router.push('/');
   };
 
@@ -160,16 +157,16 @@ export default function Cart() {
                 order.items.map(cartItem => (
                   <tr key={cartItem.tempId} style={{borderStyle: 'solid', borderWidth: '1px', borderColor: '#ac9f9f', height: '40px'}}>
                     <td>{cartItem.product.description}</td>
-                    <td align='center'>{cartItem.product.price.toString().replace('.', ',')}</td>
+                    <td align='center'>{formatValue(cartItem.product.price, false)}</td>
                     <td align='center'>{cartItem.quantity}</td>
-                    <td align='center'>{(cartItem.quantity * cartItem.product.price).toString().replace('.', ',')}</td>
+                    <td align='center'>{(formatValue(cartItem.quantity * cartItem.product.price, false))}</td>
                     <td onClick={() => removeItem(cartItem.product.productId)}>X</td>
                   </tr>
                 ))
               }
               <tr>
-                <th colSpan={3} style={{color: 'red'}}>{calcQuantity(order.items)} items</th>
-                <th colSpan={1} style={{color: 'red'}}>Total: {calcTotalPrice(order.items)}€</th>
+                <th colSpan={3} style={{color: 'red', fontSize: 18}}>{calcQuantity(order.items)} items</th>
+                <th colSpan={1} style={{color: 'red', fontSize: 18}}>Total: {formatValue(calcTotalPrice(order.items), true)}</th>
               </tr>
             </tbody>
           </table>
@@ -179,24 +176,20 @@ export default function Cart() {
       </Grid>
       <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
         <Grid container spacing={2} style={{backgroundColor: 'white', marginBottom: '7px'}}>
-          {/* <Grid item xs={12} md={12}> */}
-            {/* <Item> */}
-              <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
-                <Link href="/products">
-                  <Button variant="outlined" size="large" fullWidth>
-                    VOLTAR AO MENU
-                  </Button>
-                </Link>
-              </Grid>
-              <Grid item xs={6} md={6}  style={{paddingTop: '8px', paddingRight: '8px'}}>
-                <Button variant="contained" size="large" 
-                  onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}
-                  disabled={order.items.length === 0}>
-                  FINALIZAR PEDIDO
-                </Button>
-              </Grid>
-            {/* </Item> */}
-          {/* </Grid> */}
+          <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
+            <Link href="/products">
+              <Button variant="outlined" size="large" fullWidth>
+                VOLTAR AO MENU
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item xs={6} md={6}  style={{paddingTop: '8px', paddingRight: '8px'}}>
+            <Button variant="contained" size="large" 
+              onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}
+              disabled={order.items.length === 0}>
+              FINALIZAR PEDIDO
+            </Button>
+          </Grid>
         </Grid>
       </footer>
     </>
