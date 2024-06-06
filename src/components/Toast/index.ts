@@ -9,7 +9,7 @@ export enum ToastType {
 
 const showToast = (type: ToastType, message: string) => {
   const options: ToastOptions = {
-    toastId: message,
+    toastId: new Date().getTime(),
     theme: 'colored',
     draggable: true,
     position: 'top-center',
