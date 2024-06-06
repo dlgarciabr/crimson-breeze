@@ -12,6 +12,7 @@ interface Product {
   available: boolean;
   visible: boolean;
   type: number;
+  order: number;
 }
 
 interface OrderItem {

@@ -16,6 +16,7 @@ export const getProducts = async (available?: boolean): Promise<Product[]> => {
     price: row.price,
     available: !row.sold_out,
     visible: row.visible,
-    type: row.product_type
+    type: row.product_type,
+    order: row.product_order,
   }));
 }

@@ -4,11 +4,11 @@ import { getClient } from "@/utils/pgsql";
 import { getProducts } from "../products/actions";
 
 export const processOrder = async (order: Order): Promise<number> => {
-  const orderValid = await validateOrder(order.items);
-  if(orderValid){
-    return await saveOrder(order);
-  }
-  return -1
+  //const orderValid = await validateOrder(order.items);
+  //if(orderValid){
+  return await saveOrder(order);
+  //}
+  //return -1
 }
 
 const validateOrder = async (items: OrderItem[]): Promise<boolean> => {

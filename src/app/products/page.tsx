@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { ToastType, showToast } from "@/components/Toast";
 import { formatValue } from "@/utils/format";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -67,7 +68,7 @@ export default function Products() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Agrupamento 549 Ovar
+              Arraial Santos Populares
             </Typography>
               <div>
                 <Link href="/order">
@@ -79,46 +80,57 @@ export default function Products() {
           </Toolbar>
         </AppBar>
       </header>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginTop: '60px' }} color='#090f96' align="center">
-        comidas
-      </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          '& > :not(style)': {
-            m: 1,
-            width: '45%',
-            height: 128,
-          },
-        }}
-      >
-        {products.filter(product => product.visible && product.type === 1).map(renderProductCard)}
-      </Box>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align="center" color='#090f96'>
-        bebidas
-      </Typography>
-      <Box
-        sx={{
-          marginBottom: '60px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          '& > :not(style)': {
-            m: 1,
-            width: '45%',
-            height: 128,
-          },
-        }}
-      >
-        {products.filter(product => product.visible && product.type === 2).map(renderProductCard)}
-      </Box>
+      {
+        products.length === 0 ?
+        <div style={{position: 'absolute', height: '1000px', top: '47%', left: '46%'}}>
+          <CircularProgress />
+        </div>
+         : 
+        (
+          <>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginTop: '60px' }} color='#090f96' align="center">
+              comidas
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                '& > :not(style)': {
+                  m: 1,
+                  width: '45%',
+                  height: 128,
+                },
+              }}
+            >
+              {products.filter(product => product.visible && product.type === 1).sort((a,b)=> a.order < b.order ? -1 : 1).map(renderProductCard)}
+            </Box>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }} align="center" color='#090f96'>
+              bebidas
+            </Typography>
+            <Box
+              sx={{
+                marginBottom: '60px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                '& > :not(style)': {
+                  m: 1,
+                  width: '45%',
+                  height: 128,
+                },
+              }}
+            >
+              {products.filter(product => product.visible && product.type === 2).sort((a,b)=> a.order < b.order ? -1 : 1).map(renderProductCard)}
+            </Box>
+          </>
+        )
+      }
       <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Item>
               <Link href="/order">
                 <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0}>
-                  Ver meu pedido
+                  FINALIZAR ESCOLHA
                 </Button>
               </Link>
             </Item>

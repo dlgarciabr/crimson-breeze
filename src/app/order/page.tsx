@@ -70,11 +70,10 @@ export default function Cart() {
         open={showSuccessModal}
         disableEscapeKeyDown={true}
         TransitionComponent={Transition}>
-        <DialogTitle>Vossa escolha foi registada com sucesso!</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Typography variant="h6" component="div" align='center'>
-              pedido nº
+            <Typography variant="h6" component="div" align='center' style={{color: "black"}}>
+              Escolha registada!
             </Typography>
             <Typography variant="h1" component="div" align='center'>
               {orderNumber}
@@ -101,11 +100,10 @@ export default function Cart() {
         maxWidth="xs"
         disableEscapeKeyDown={true}
         TransitionComponent={Transition}>
-        <DialogTitle>Confirmação</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <Typography variant="h6" component="div">
-              Se desejares insira o vosso nome e confirme a escolha.
+              Confirme a vossa escolha.
             </Typography>
             <TextField
               autoFocus
@@ -116,6 +114,7 @@ export default function Cart() {
               type="text"
               fullWidth
               variant="outlined"
+              autoComplete='off'
               onChange={handleChangeCustomerName}
               value={customerName}
             />
@@ -145,7 +144,7 @@ export default function Cart() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Agrupamento 549 Ovar
+              Arraial Santos Populares
             </Typography>
           </Toolbar>
         </AppBar>
@@ -157,7 +156,7 @@ export default function Cart() {
           </Typography>
         </Grid>
         <Grid item xs={12} md={12}>
-          <table style={{width: '100%'}}>
+          <table style={{width: '100%', backgroundColor: '#ffffff'}}>
             <tbody>
               <tr style={{height: '40px'}}>
                 <th>ITEM</th>
@@ -168,7 +167,7 @@ export default function Cart() {
               </tr>
               {
                 order.items.map(cartItem => (
-                  <tr key={cartItem.tempId} style={{borderStyle: 'solid', borderWidth: '1px', borderColor: '#ac9f9f', height: '40px'}}>
+                  <tr key={cartItem.tempId} style={{borderStyle: 'solid', borderWidth: '1px', borderColor: '#ac9f9f', height: '60px'}}>
                     <td>{cartItem.product.description}</td>
                     <td align='center'>{formatValue(cartItem.product.price, false)}</td>
                     <td align='center'>{cartItem.quantity}</td>
@@ -181,7 +180,7 @@ export default function Cart() {
                   </tr>
                 ))
               }
-              <tr>
+              <tr style={{height: '40px'}}>
                 <th colSpan={2} style={{color: 'red', fontSize: 18}}>{calcQuantity(order.items)} item(s)</th>
                 <th colSpan={1} style={{color: 'red', fontSize: 18}}>Total:</th>
                 <th colSpan={1} style={{color: 'red', fontSize: 18}}>{formatValue(calcTotalPrice(order.items), true)}</th>
@@ -193,7 +192,7 @@ export default function Cart() {
         {renderConfirmationModal()}
       </Grid>
       <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
-        <Grid container spacing={2} style={{backgroundColor: 'white', marginBottom: '7px'}}>
+        <Grid container spacing={2} style={{backgroundColor: 'white', paddingBottom: '7px'}}>
           <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
             <Link href="/products">
               <Button variant="outlined" size="large" fullWidth>
@@ -205,7 +204,7 @@ export default function Cart() {
             <Button variant="contained" size="large" 
               onClick={() => setShowConfirmModal(true)} fullWidth style={{padding: '8 10'}}
               disabled={order.items.length === 0}>
-              FINALIZAR PEDIDO
+              CONFIRMAR
             </Button>
           </Grid>
         </Grid>
