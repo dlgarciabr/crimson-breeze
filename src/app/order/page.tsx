@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { calcQuantity, calcTotalPrice, useStore } from '@/utils/order';
 import Button from '@mui/material/Button';
@@ -41,6 +41,7 @@ const Transition = forwardRef(function Transition(
 });
 
 export default function Cart() {
+  const theme = useTheme();
   const { order, removeItem, clearOrder } = useStore();
   const [ showSuccessModal, setShowSuccessModal ] = useState<boolean>(false);
   const [ showConfirmModal, setShowConfirmModal ] = useState<boolean>(false);
@@ -72,7 +73,7 @@ export default function Cart() {
         TransitionComponent={Transition}>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Typography variant="h6" component="div" align='center' style={{color: "black"}}>
+            <Typography variant="h6" component="div" align='center'>
               Escolha registada!
             </Typography>
             <Typography variant="h1" component="div" align='center'>
@@ -110,7 +111,7 @@ export default function Cart() {
               margin="dense"
               id="name"
               name="email"
-              label="Nome"
+              label="vosso nome"
               type="text"
               fullWidth
               variant="outlined"
@@ -151,12 +152,10 @@ export default function Cart() {
       </header>
       <Grid container spacing={2} style={{ paddingBottom: '1000px', marginTop: '60px'}}>
         <Grid item xs={12} md={12}>
-          <Typography variant="h6" component="div" align='center' color='#090f96'>
-            RESUMO DA VOSSA ESCOLHA
-          </Typography>
+          <p style={{color:'#090f96', textAlign: 'center', fontSize: '1.25rem', fontWeight: '500'}}>RESUMO DA VOSSA ESCOLHA</p>
         </Grid>
         <Grid item xs={12} md={12}>
-          <table style={{width: '100%', backgroundColor: '#ffffff'}}>
+          <table style={{width: '100%', backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff', color: '#000000'}}>
             <tbody>
               <tr style={{height: '40px'}}>
                 <th>ITEM</th>
@@ -174,7 +173,7 @@ export default function Cart() {
                     <td align='center'>{(formatValue(cartItem.quantity * cartItem.product.price, false))}</td>
                     <td onClick={() => removeItem(cartItem.product.productId)}>
                       <IconButton aria-label="delete" size="medium">
-                        <DeleteIcon fontSize="inherit" />
+                        <DeleteIcon fontSize="inherit" style={{color: '#000000'}} />
                       </IconButton>
                     </td>
                   </tr>

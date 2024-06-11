@@ -22,7 +22,7 @@ export default function Home() {
         <Grid container spacing={2} style={{backgroundColor: 'white'}}>
           <Grid item  xs={12} md={12} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px', paddingRight: '8px', paddingBottom: '8px'}}>
             <Link href="/products">
-              <Button variant="contained" size="large" fullWidth>
+              <Button variant="contained" size="large" fullWidth style={{color: '#ffffff!important'}}>
                 NOSSO MENU
               </Button>
             </Link>

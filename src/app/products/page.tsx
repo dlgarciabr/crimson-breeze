@@ -17,9 +17,10 @@ import { styled } from '@mui/material/styles';
 import { ToastType, showToast } from "@/components/Toast";
 import { formatValue } from "@/utils/format";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from 'next/navigation';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#fff!important' : '#fff!important',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -30,6 +31,7 @@ export default function Products() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const { addItem, order } = useStore();
+  const router = useRouter();
 
   useEffect(() => {
     (async ()=>{
@@ -41,6 +43,10 @@ export default function Products() {
   const addToOrder = (product: Product) => {
     addItem(product);
     showToast(ToastType.SUCCESS, `${product.description} adicionado ao pedido!`);
+  }
+
+  const showSummary = () => {
+    router.push('/order');
   }
 
   const renderProductCard = (product: Product) => {
@@ -88,9 +94,7 @@ export default function Products() {
          : 
         (
           <>
-            <Typography variant="h5" component="div" sx={{ flexGrow: 1, marginTop: '60px' }} color='#090f96' align="center">
-              comidas
-            </Typography>
+            <p style={{color: '#000000', textAlign: 'center', fontSize: '1.5rem',  marginTop: '60px'}}>COMIDAS</p>
             <Box
               sx={{
                 display: 'flex',
@@ -104,9 +108,7 @@ export default function Products() {
             >
               {products.filter(product => product.visible && product.type === 1).sort((a,b)=> a.order < b.order ? -1 : 1).map(renderProductCard)}
             </Box>
-            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }} align="center" color='#090f96'>
-              bebidas
-            </Typography>
+            <p style={{color: '#000000', textAlign: 'center', fontSize: '1.5rem'}}>BEBIDAS</p>
             <Box
               sx={{
                 marginBottom: '60px',
@@ -128,11 +130,9 @@ export default function Products() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Item>
-              <Link href="/order">
-                <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0}>
-                  FINALIZAR ESCOLHA
-                </Button>
-              </Link>
+              <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0} style={{color: '#ffffff!important'}} onClick={() => showSummary()}>
+                FINALIZAR ESCOLHA
+              </Button>
             </Item>
           </Grid>
         </Grid>
