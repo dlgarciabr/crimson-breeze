@@ -17,6 +17,12 @@ export const useStore = create<OrderState>((set) => ({
       items: removeItem(state.order.items, productId)
     }
   })),
+  removeAllItems: (productId) => set((state) => ({ 
+    order: {
+      customerName: state.order.customerName,
+      items: removeAllItems(state.order.items, productId)
+    }
+  })),
   clearOrder: () => set(() => ({
     order: {
       customerName: '',
@@ -39,6 +45,10 @@ export const calcQuantity = (items: OrderItem[]) => {
   );
 }
 
+export const getItem = (cartItems: OrderItem[], productId: number) => (
+  cartItems.find(item => item.product.productId === productId)
+);
+
 const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
   const addedCartItem = cartItems.find(item => item.product.productId === product.productId);
   if(addedCartItem){
@@ -50,5 +60,19 @@ const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
 }
 
 const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
+  const modifiedCartItems = (cartItems as OrderItem[] | undefined[]).map(item => {
+    if(item?.product.productId === productId){
+      if(item.quantity > 0){
+        item.quantity--;
+      }else{
+        item = undefined;
+      }
+    }
+    return item;
+  });
+  return modifiedCartItems.filter(item => item !== undefined) as OrderItem[];
+};
+
+const removeAllItems = (cartItems: OrderItem[], productId: number): OrderItem[] => {
   return cartItems.filter(item => item.product.productId !== productId);
 };

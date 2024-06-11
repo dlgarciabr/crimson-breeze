@@ -42,7 +42,7 @@ const Transition = forwardRef(function Transition(
 
 export default function Cart() {
   const theme = useTheme();
-  const { order, removeItem, clearOrder } = useStore();
+  const { order, removeAllItems, clearOrder } = useStore();
   const [ showSuccessModal, setShowSuccessModal ] = useState<boolean>(false);
   const [ showConfirmModal, setShowConfirmModal ] = useState<boolean>(false);
   const [ orderNumber, setOrderNumber ] = useState<number | undefined>();
@@ -162,7 +162,7 @@ export default function Cart() {
                 <th>PREÇO</th>
                 <th>QTD</th>
                 <th>TOTAL</th>
-                <th></th>
+                {/* <th></th> */}
               </tr>
               {
                 order.items.map(cartItem => (
@@ -171,11 +171,11 @@ export default function Cart() {
                     <td align='center'>{formatValue(cartItem.product.price, false)}</td>
                     <td align='center'>{cartItem.quantity}</td>
                     <td align='center'>{(formatValue(cartItem.quantity * cartItem.product.price, false))}</td>
-                    <td onClick={() => removeItem(cartItem.product.productId)}>
+                    {/* <td onClick={() => removeAllItems(cartItem.product.productId)}>
                       <IconButton aria-label="delete" size="medium">
                         <DeleteIcon fontSize="inherit" style={{color: '#000000'}} />
                       </IconButton>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               }
@@ -195,7 +195,7 @@ export default function Cart() {
           <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
             <Link href="/products">
               <Button variant="outlined" size="large" fullWidth>
-                VOLTAR AO MENU
+                VOLTAR
               </Button>
             </Link>
           </Grid>

@@ -2,6 +2,7 @@ interface OrderState {
   order: Order;
   addItem: (item: Product) => void;
   removeItem: (productId: number) => void;
+  removeAllItems: (productId: number) => void;
   clearOrder: () => void;
 }
 

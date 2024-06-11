@@ -10,14 +10,18 @@ import Typography from '@mui/material/Typography';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import Link from 'next/link';
 import Badge from '@mui/material/Badge';
-import { calcQuantity, useStore } from "@/utils/order";
+import { calcQuantity, useStore, getItem } from "@/utils/order";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import { ThemeProvider, styled } from '@mui/material/styles';
 import { ToastType, showToast } from "@/components/Toast";
 import { formatValue } from "@/utils/format";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useRouter } from 'next/navigation';
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton/IconButton";
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#fff!important' : '#fff!important',
@@ -30,8 +34,9 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Products() {
 
   const [products, setProducts] = useState<Product[]>([]);
-  const { addItem, order } = useStore();
+  const { addItem, order, removeItem } = useStore();
   const router = useRouter();
+  const [isDarkMode, setDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
     (async ()=>{
@@ -41,8 +46,16 @@ export default function Products() {
   },[])
 
   const addToOrder = (product: Product) => {
+    if(!product.available){
+      return;
+    }
     addItem(product);
-    showToast(ToastType.SUCCESS, `${product.description} adicionado ao pedido!`);
+    showToast(ToastType.SUCCESS, `1 ${product.description} adicionado ao pedido!`);
+  }
+
+  const removeFromOrder = (product: Product) => {
+    removeItem(product.productId)
+    showToast(ToastType.WARNING, `1 ${product.description} removido do pedido!`);
   }
 
   const showSummary = () => {
@@ -50,16 +63,36 @@ export default function Products() {
   }
 
   const renderProductCard = (product: Product) => {
+    const productQuantityInOrder = getItem(order.items, product.productId)?.quantity || 0;
     return (
-      <Paper elevation={3} key={product.productId} onClick={product.available ? () => addToOrder(product) : ()=>{}}
-        style={{paddingTop: '20px', textAlign: 'center'}}>
-        <Typography variant="h5" component="div" style={product.available ? {} : {color: 'grey'}}>
+      <Paper elevation={3} key={product.productId}
+        style={{paddingTop: '10px', textAlign: 'center'}}>
+        <Typography variant="h5" component="div" style={product.available ? { height: '55px' } : {color: 'grey', height: '55px'}}>
           {product.description}
         </Typography>
         <Typography variant="h5" color="text.secondary" style={product.available ? {} : {color: 'grey'}}>
           {formatValue(product.price, true)}
         </Typography>
-        {!product.available && 
+        {product.available ?
+          <>
+            <IconButton aria-label="delete" size="medium" onClick={() => removeFromOrder(product)} 
+              disabled={!(productQuantityInOrder > 0)}>
+              <RemoveCircleOutlineIcon fontSize="inherit" />
+            </IconButton>
+              <TextField id="outlined-basic" variant="outlined" size="small" 
+                sx={{ 
+                  width: '40%',
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#00b531",
+                    fontWeight: "bold",
+                  },
+                }}  
+                inputProps={{style: {textAlign: 'center'}}} 
+                value={productQuantityInOrder} disabled/>
+            <IconButton aria-label="delete" size="medium" onClick={() => addToOrder(product)}>
+              <AddCircleOutlineIcon fontSize="inherit" />
+            </IconButton>
+          </> :
           <Typography variant="h6" color="red">
             indisponível
           </Typography>
@@ -102,7 +135,7 @@ export default function Products() {
                 '& > :not(style)': {
                   m: 1,
                   width: '45%',
-                  height: 128,
+                  height: 150,
                 },
               }}
             >
@@ -117,7 +150,7 @@ export default function Products() {
                 '& > :not(style)': {
                   m: 1,
                   width: '45%',
-                  height: 128,
+                  height: 150,
                 },
               }}
             >
