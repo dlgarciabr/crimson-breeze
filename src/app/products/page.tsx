@@ -50,16 +50,18 @@ export default function Products() {
       return;
     }
     addItem(product);
-    showToast(ToastType.SUCCESS, `1 ${product.description} adicionado ao pedido!`);
+    showToast(ToastType.SUCCESS, `${product.description} adicionado ao pedido!`);
   }
 
   const removeFromOrder = (product: Product) => {
     removeItem(product.productId)
-    showToast(ToastType.WARNING, `1 ${product.description} removido do pedido!`);
+    showToast(ToastType.WARNING, `${product.description} removido do pedido!`);
   }
 
-  const showSummary = () => {
-    router.push('/order');
+  const showOrderSummary = () => {
+    if(order.items.length > 0){
+      router.push('/order');
+    }
   }
 
   const renderProductCard = (product: Product) => {
@@ -103,18 +105,16 @@ export default function Products() {
   
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <header style={{ position: "fixed", top: 0, width: '100%'}}>
+      <header style={{ position: "fixed", top: 0, width: '100%', zIndex: '100'}}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Arraial Santos Populares
             </Typography>
-              <div>
-                <Link href="/order">
-                  <Badge badgeContent={calcQuantity(order.items)} color="secondary">
-                    <ShoppingCart/>
-                  </Badge>
-                </Link>
+              <div onClick={() => showOrderSummary()}>
+                <Badge badgeContent={calcQuantity(order.items)} color="secondary">
+                  <ShoppingCart/>
+                </Badge>
               </div>
           </Toolbar>
         </AppBar>
@@ -163,7 +163,7 @@ export default function Products() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Item>
-              <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0} style={{color: '#ffffff!important'}} onClick={() => showSummary()}>
+              <Button variant="contained" size="large" fullWidth disabled={order.items.length === 0} style={{color: '#ffffff!important'}} onClick={() => showOrderSummary()}>
                 FINALIZAR ESCOLHA
               </Button>
             </Item>

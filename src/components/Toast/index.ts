@@ -13,7 +13,7 @@ const showToast = (type: ToastType, message: string) => {
     theme: 'colored',
     draggable: true,
     position: 'top-center',
-    autoClose: type === ToastType.ERROR ? 20000 : 5000
+    autoClose: type === ToastType.ERROR ? 20000 : 3000
   };
   toast[type](message, options);
 };
