@@ -60,17 +60,16 @@ const addItem = (cartItems: OrderItem[], product: Product): OrderItem[] => {
 }
 
 const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
-  const modifiedCartItems = (cartItems as OrderItem[] | undefined[]).map(item => {
+  const modifiedCartItems = (cartItems as OrderItem[]).map(item => {
     if(item?.product.productId === productId){
       if(item.quantity > 0){
         item.quantity--;
-      }else{
-        item = undefined;
       }
     }
     return item;
   });
-  return modifiedCartItems.filter(item => item !== undefined) as OrderItem[];
+  console.log(modifiedCartItems)
+  return modifiedCartItems.filter(item => item.quantity > 0);
 };
 
 const removeAllItems = (cartItems: OrderItem[], productId: number): OrderItem[] => {
