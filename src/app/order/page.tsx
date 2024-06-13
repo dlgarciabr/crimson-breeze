@@ -103,15 +103,15 @@ export default function Cart() {
         TransitionComponent={Transition}>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Typography variant="h6" component="div">
-              Confirme a vossa escolha.
+            <Typography variant="h6" component="div" align='center'>
+              Indique o seu nome para identificar o pedido (opcional).
             </Typography>
             <TextField
               autoFocus
               margin="dense"
               id="name"
               name="email"
-              label="vosso nome"
+              label="nome"
               type="text"
               fullWidth
               variant="outlined"
@@ -152,7 +152,7 @@ export default function Cart() {
       </header>
       <Grid container spacing={2} style={{ paddingBottom: '1000px', marginTop: '60px'}}>
         <Grid item xs={12} md={12}>
-          <p style={{color:'#090f96', textAlign: 'center', fontSize: '1.25rem', fontWeight: '500'}}>RESUMO DA VOSSA ESCOLHA</p>
+          <p style={{color:'#090f96', textAlign: 'center', fontSize: '1.25rem', fontWeight: '500'}}>RESUMO DA SUA ESCOLHA</p>
         </Grid>
         <Grid item xs={12} md={12}>
           <table style={{width: '100%', backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff', color: '#000000'}}>

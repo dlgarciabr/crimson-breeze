@@ -8,12 +8,11 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ShoppingCart from '@mui/icons-material/ShoppingCart';
-import Link from 'next/link';
 import Badge from '@mui/material/Badge';
 import { calcQuantity, useStore, getItem } from "@/utils/order";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { ThemeProvider, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { ToastType, showToast } from "@/components/Toast";
 import { formatValue } from "@/utils/format";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -64,14 +63,27 @@ export default function Products() {
     }
   }
 
+  const getName = (title: string) => title.split('(')[0];
+
+  const getDescription = (title: string) => { 
+    const tempDesc = title.split('(')[1];
+    return tempDesc ? tempDesc.substring(0, tempDesc.length - 1) : '';
+  };
+
   const renderProductCard = (product: Product) => {
     const productQuantityInOrder = getItem(order.items, product.productId)?.quantity || 0;
     return (
       <Paper elevation={3} key={product.productId}
         style={{paddingTop: '10px', textAlign: 'center'}}>
-        <Typography variant="h5" component="div" style={product.available ? { height: '55px' } : {color: 'grey', height: '55px'}}>
-          {product.description}
-        </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}} style={product.available ? { height: getDescription(product.description) ? '55px': '75px' } : {color: 'grey', height: getDescription(product.description) ? '55px': '75px'}}>
+            <Typography variant="h5">{getName(product.description)}</Typography>
+          </Box>
+        {
+          getDescription(product.description) && 
+          <Typography variant="subtitle1" component="div" style={product.available ? { height: '20px', lineHeight: '1.25' } : {color: 'grey', height: '20px', lineHeight: '1.25'}}>
+            {getDescription(product.description)}
+          </Typography>
+        }
         <Typography variant="h5" color="text.secondary" style={product.available ? {} : {color: 'grey'}}>
           {formatValue(product.price, true)}
         </Typography>
@@ -135,7 +147,7 @@ export default function Products() {
                 '& > :not(style)': {
                   m: 1,
                   width: '45%',
-                  height: 150,
+                  height: 165,
                 },
               }}
             >
@@ -150,7 +162,7 @@ export default function Products() {
                 '& > :not(style)': {
                   m: 1,
                   width: '45%',
-                  height: 150,
+                  height: 165,
                 },
               }}
             >
