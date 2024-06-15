@@ -52,7 +52,7 @@ export default function Products() {
   useEffect(()=>{
     clearTimeout(timeoutId.current);
     const newTimeoutId = setTimeout(()=>{
-      cancelOrder();
+      //cancelOrder();
     }, 180000);
     timeoutId.current = newTimeoutId;
   // eslint-disable-next-line react-hooks/exhaustive-deps
