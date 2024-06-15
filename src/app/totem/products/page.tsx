@@ -163,7 +163,7 @@ export default function Products() {
   
   return (
     <Box sx={{ flexGrow: 1, paddingTop: '30px', paddingBottom: '80px' }}>
-      <header style={{ position: "fixed", top: 0, width: '100%', zIndex: '100', paddingTop: '20px'}}>
+      <header style={{ position: "fixed", top: 0, width: '100%', zIndex: '100', paddingTop: '5px'}}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -229,7 +229,7 @@ export default function Products() {
         </Grid>
       </footer>
     */}
-      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '20px'}}>
+      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '5px'}}>
         <Grid container spacing={2} style={{backgroundColor: 'white', paddingBottom: '7px'}}>
           <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
             <Button variant="outlined" size="large" fullWidth onClick={()=> setShowCancelConfirmModal(true)}>
