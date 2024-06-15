@@ -25,7 +25,7 @@ export default function Home() {
           />
         </Grid>
       </Grid>
-      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '5px'}}>
+      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '10px'}}>
         <Grid container spacing={2} style={{backgroundColor: 'white'}}>
           <Grid item  xs={12} md={12} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px', paddingRight: '8px', paddingBottom: '8px'}}>
             <Button variant="contained" size="large" fullWidth style={{color: '#ffffff!important'}} onClick={() => showMenu()}>
