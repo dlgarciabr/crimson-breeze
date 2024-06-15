@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { getProducts } from '@/app/products/actions'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -21,20 +21,26 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton/IconButton";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Dialog from "@mui/material/Dialog";
+import { DialogContent, DialogContentText, DialogActions, Slide } from "@mui/material";
+import { TransitionProps } from "@mui/material/transitions";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#fff!important' : '#fff!important',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Products() {
 
   const [products, setProducts] = useState<Product[]>([]);
-  const { addItem, order, removeItem } = useStore();
+  const { addItem, order, removeItem, clearOrder } = useStore();
   const router = useRouter();
+  const [ showCancelConfirmModal, setShowCancelConfirmModal ] = useState<boolean>(false);
+  const timeoutId = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     (async ()=>{
@@ -42,6 +48,15 @@ export default function Products() {
       setProducts(result);
     })();
   },[])
+
+  useEffect(()=>{
+    clearTimeout(timeoutId.current);
+    const newTimeoutId = setTimeout(()=>{
+      cancelOrder();
+    }, 180000);
+    timeoutId.current = newTimeoutId;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[order.lastUpdate]);
 
   const addToOrder = (product: Product) => {
     if(!product.available){
@@ -58,7 +73,8 @@ export default function Products() {
 
   const showOrderSummary = () => {
     if(order.items.length > 0){
-      router.push('/order');
+      clearTimeout(timeoutId.current);
+      router.push('/totem/order');
     }
   }
 
@@ -113,10 +129,41 @@ export default function Products() {
       </Paper>
     );
   }
+
+  const renderCancelConfirmationModal = () => {
+    return (
+      <Dialog 
+        open={showCancelConfirmModal}
+        maxWidth="xs"
+        disableEscapeKeyDown={true}
+        TransitionComponent={Transition}>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <Typography variant="h6" component="div" align='center'>
+              Deseja realmente cancelar a escolha?
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setShowCancelConfirmModal(false)}>
+            VOLTAR
+          </Button>
+          <Button onClick={cancelOrder}>
+            CONFIRMAR
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  const cancelOrder = () => {
+    clearOrder();
+    router.push('/totem');
+  }
   
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <header style={{ position: "fixed", top: 0, width: '100%', zIndex: '100'}}>
+    <Box sx={{ flexGrow: 1, paddingTop: '30px', paddingBottom: '80px' }}>
+      <header style={{ position: "fixed", top: 0, width: '100%', zIndex: '100', paddingTop: '20px'}}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -141,7 +188,7 @@ export default function Products() {
             <p style={{color: '#000000', textAlign: 'center', fontSize: '1.5rem',  marginTop: '60px'}}>COMIDAS</p>
             <Box
               sx={{
-                display: 'flex',
+                display: 'ruby',
                 flexWrap: 'wrap',
                 '& > :not(style)': {
                   m: 1,
@@ -156,7 +203,7 @@ export default function Products() {
             <Box
               sx={{
                 marginBottom: '60px',
-                display: 'flex',
+                display: 'ruby',
                 flexWrap: 'wrap',
                 '& > :not(style)': {
                   m: 1,
@@ -170,7 +217,7 @@ export default function Products() {
           </>
         )
       }
-      <footer style={{position: "fixed", bottom: 0, width: '100%'}}>
+      {/* <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '20px'}}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Item>
@@ -181,6 +228,24 @@ export default function Products() {
           </Grid>
         </Grid>
       </footer>
-    </Box>
+    */}
+      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '20px'}}>
+        <Grid container spacing={2} style={{backgroundColor: 'white', paddingBottom: '7px'}}>
+          <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
+            <Button variant="outlined" size="large" fullWidth onClick={()=> setShowCancelConfirmModal(true)}>
+              CANCELAR
+            </Button>
+          </Grid>
+          <Grid item xs={6} md={6}  style={{paddingTop: '8px', paddingRight: '8px'}}>
+            <Button variant="contained" size="large" 
+               onClick={() => showOrderSummary()} fullWidth style={{padding: '8 10'}}
+              disabled={order.items.length === 0}>
+              FINALIZAR ESCOLHA
+            </Button>
+          </Grid>
+        </Grid>
+      </footer>
+      {renderCancelConfirmationModal()}
+    </Box> 
   )
 }

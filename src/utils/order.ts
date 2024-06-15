@@ -3,30 +3,35 @@ import { create } from 'zustand';
 export const useStore = create<OrderState>((set) => ({
   order: {
     customerName: '',
-    items: []
+    items: [],
+    lastUpdate: new Date(),
   },
   addItem: (product) => set((state) => ({ 
     order: {
+      lastUpdate: new Date(),
       customerName: state.order.customerName,
-      items: addItem(state.order.items, product)
+      items: addItem(state.order.items, product),
     }
   })),
   removeItem: (productId) => set((state) => ({ 
     order: {
+      lastUpdate: new Date(),
       customerName: state.order.customerName,
       items: removeItem(state.order.items, productId)
     }
   })),
   removeAllItems: (productId) => set((state) => ({ 
     order: {
+      lastUpdate: new Date(),
       customerName: state.order.customerName,
       items: removeAllItems(state.order.items, productId)
     }
   })),
   clearOrder: () => set(() => ({
     order: {
+      lastUpdate: new Date(),
       customerName: '',
-      items: []
+      items: [],
     }
   })),
 }))
@@ -68,7 +73,6 @@ const removeItem = (cartItems: OrderItem[], productId: number): OrderItem[] => {
     }
     return item;
   });
-  console.log(modifiedCartItems)
   return modifiedCartItems.filter(item => item.quantity > 0);
 };
 

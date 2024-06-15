@@ -25,4 +25,5 @@ interface OrderItem {
 interface Order {
   customerName: string;
   items: OrderItem[];
+  lastUpdate: Date;
 }
