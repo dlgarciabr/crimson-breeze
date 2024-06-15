@@ -138,7 +138,7 @@ export default function Cart() {
 
   return (
     <>
-      <header style={{ position: "fixed", top: 0, width: '100%', paddingTop: '10px'}}>
+      <header style={{ position: "fixed", top: 0, width: '100%', paddingTop: '15px'}}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -187,7 +187,7 @@ export default function Cart() {
         {renderSuccessDialog()}
         {renderConfirmationModal()}
       </Grid>
-      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '10px'}}>
+      <footer style={{position: "fixed", bottom: 0, width: '100%', paddingBottom: '15px'}}>
         <Grid container spacing={2} style={{backgroundColor: 'white', paddingBottom: '7px'}}>
           <Grid item  xs={6} md={6} alignItems='center' style={{paddingTop: '8px', paddingLeft: '22px'}}>
             <Link href="/totem/products">
