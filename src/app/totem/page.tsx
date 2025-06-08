@@ -14,12 +14,12 @@ export default function Home() {
   }
   return (
     <>
-      <Grid container spacing={2} justifyContent='center' style={{position: 'absolute', top: '15%'}}>
-        <Grid item xs={12} md={12}>
+      <Grid container spacing={2} justifyContent='center'>
+        <Grid item xs={12} md={12} style={{ display: 'flex',justifyContent: 'center'}}>
           <Image
             src="/logo_arraial.jpeg"
             alt="Arraial"
-            width="800"
+            width="750"
             height="800"
             onClick={() => showMenu()}
           />
