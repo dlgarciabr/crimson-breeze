@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{backgroundColor: '#0092be'}}>
+      <body className={inter.className} style={{backgroundColor: '#22b0d8'}}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             {children}
