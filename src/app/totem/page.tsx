@@ -1,7 +1,6 @@
 "use client";
 
 import Button from '@mui/material/Button';
-import Link from 'next/link';
 import Image from 'next/image';
 import Grid from '@mui/material/Grid';
 import { useRouter } from 'next/navigation';
